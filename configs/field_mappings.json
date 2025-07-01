@@ -1,0 +1,11 @@
+{
+  "type_field_map": {
+    "0-13": "130-122"
+  },
+  "priority_field_map": {
+    "0-13": "130-121"
+  },
+  "assignee_field_map": {
+    "0-13": "67-4"
+  }
+}

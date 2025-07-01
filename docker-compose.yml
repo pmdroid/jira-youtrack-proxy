@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  jira-youtrack-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - YOUTRACK_URL=${YOUTRACK_URL:-https://example.youtrack.cloud}
+      - FIELD_MAPPING_FILE_PATH=/app/configs/field_mappings.json
+    volumes:
+      - ./configs:/app/configs:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a reverse proxy for HTTPS termination
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "443:443"
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./certs:/etc/nginx/certs:ro
+  #   depends_on:
+  #     - jira-youtrack-proxy
+  #   restart: unless-stopped
